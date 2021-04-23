@@ -1,6 +1,6 @@
+import 'package:acessibility_project/ui/decision.dart';
 import 'package:flutter/material.dart';
-import 'ui/home.dart';
 
 void main() {
-  runApp(MaterialApp(home: new Home()));
+  runApp(MaterialApp(home: new Decision()));
 }

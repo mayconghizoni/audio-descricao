@@ -10,7 +10,7 @@ class _TransmitionState extends State<Transmition> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text("Olho por olho... Não, pera!"),
+        title: Text("Áudio Descrição"),
         backgroundColor: Colors.deepOrange,
         // actions: <Widget>[],
       ),
@@ -21,7 +21,7 @@ class _TransmitionState extends State<Transmition> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "LIVE BOOOYYYSSSS",
+              "Nome da sala ",
               style: TextStyle(
                 fontSize: 24.5,
                 fontWeight: FontWeight.w500,
