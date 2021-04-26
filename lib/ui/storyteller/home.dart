@@ -1,3 +1,4 @@
+import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:acessibility_project/ui/storyteller/transmition.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -59,6 +60,9 @@ class _HomeState extends State<Home> {
   }
 
   nextPage() {
+    SocketController socketController = new SocketController();
+    socketController.createScocket();
+    socketController.connectToSocket();
     Navigator.push(
         context,
         MaterialPageRoute(
