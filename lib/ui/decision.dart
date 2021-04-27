@@ -9,6 +9,7 @@ class Decision extends StatefulWidget {
 
 class _DecisionState extends State<Decision> {
   final TextEditingController _usuarioController = new TextEditingController();
+  String teste = "Teste";
 
   showHomeStoryteller() {
     Navigator.push(
