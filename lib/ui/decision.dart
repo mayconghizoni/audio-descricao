@@ -9,6 +9,31 @@ class Decision extends StatefulWidget {
 
 class _DecisionState extends State<Decision> {
   final TextEditingController _usuarioController = new TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
+  String _name = "";
+
+  validateInputsStoryteller() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      showHomeStoryteller();
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
+  }
+
+  validateInputsListener() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      showHomeListener();
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
+  }
 
   showHomeStoryteller() {
     Navigator.push(
@@ -19,6 +44,7 @@ class _DecisionState extends State<Decision> {
   }
 
   showHomeListener() {
+    debugPrint(_name);
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -35,8 +61,8 @@ class _DecisionState extends State<Decision> {
           // actions: <Widget>[],
         ),
         backgroundColor: Colors.lightBlueAccent[100],
-        body: Container(
-          width: double.infinity,
+        body: Form(
+          key: _formKey,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -50,13 +76,23 @@ class _DecisionState extends State<Decision> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(12.0),
-                  child: TextField(
+                  child: TextFormField(
                     controller: _usuarioController,
                     decoration: InputDecoration(
                       hintText: 'Nome',
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(4.5)),
                     ),
+                    keyboardType: TextInputType.text,
+                    validator: (String arg) {
+                      if (arg.length < 3)
+                        return 'Digite seu nome';
+                      else
+                        return null;
+                    },
+                    onSaved: (String val) {
+                      _name = val;
+                    },
                   ),
                 ),
                 Padding(
@@ -69,7 +105,7 @@ class _DecisionState extends State<Decision> {
                         Container(
                           // ignore: deprecated_member_use
                           child: RaisedButton(
-                            onPressed: showHomeStoryteller,
+                            onPressed: validateInputsStoryteller,
                             color: Colors.deepOrange,
                             child: Text(
                               "Narrador",
@@ -84,7 +120,7 @@ class _DecisionState extends State<Decision> {
                         Container(
                           // ignore: deprecated_member_use
                           child: RaisedButton(
-                            onPressed: showHomeListener,
+                            onPressed: validateInputsListener,
                             color: Colors.deepOrange,
                             child: Text(
                               "Ouvinte",

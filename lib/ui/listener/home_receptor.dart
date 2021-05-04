@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
 class HomeReceptor extends StatefulWidget {
@@ -33,7 +36,7 @@ class _HomeReceptorState extends State<HomeReceptor> {
               padding: const EdgeInsets.all(8.0),
               // ignore: deprecated_member_use
               child: RaisedButton(
-                onPressed: () => {},
+                onPressed: connectToSocket,
                 child: Text(
                   "ENTRAR",
                   style: TextStyle(
@@ -48,5 +51,12 @@ class _HomeReceptorState extends State<HomeReceptor> {
         ),
       ),
     );
+  }
+
+  connectToSocket() async {
+    SocketController socketController = new SocketController();
+    Socket socket = await socketController.connectToSocket();
+
+    socketController.listenConnection(socket);
   }
 }
