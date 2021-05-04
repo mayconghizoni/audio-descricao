@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:acessibility_project/ui/storyteller/transmition.dart';
 import 'package:flutter/cupertino.dart';
@@ -59,10 +62,15 @@ class _HomeState extends State<Home> {
     Navigator.of(context).pop(false);
   }
 
-  nextPage() {
+  nextPage() async {
+    print("nextPage");
     SocketController socketController = new SocketController();
-    socketController.createScocket();
-    socketController.connectToSocket();
+    await socketController.createScocket();
+
+    Future.delayed(Duration(seconds: 10));
+
+    Socket socket = await socketController.connectToSocket();
+    socketController.listenConnection(socket);
     Navigator.push(
         context,
         MaterialPageRoute(
