@@ -36,10 +36,11 @@ class _DecisionState extends State<Decision> {
   }
 
   showHomeStoryteller() {
+    String textToSend = _usuarioController.text;
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new Home(),
+          builder: (context) => new Home(textToSend),
         ));
   }
 

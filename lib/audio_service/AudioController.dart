@@ -94,7 +94,7 @@ class _MyAppState extends State<MyApp> {
           children: [
             IconButton(
               iconSize: 96.0,
-              icon: Icon(_isRecording ? Icons.mic_off : Icons.mic),
+              icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
               onPressed: _isRecording ? _recorder.stop : _recorder.start,
             ),
             IconButton(
@@ -102,7 +102,10 @@ class _MyAppState extends State<MyApp> {
               icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
               onPressed: _isPlaying ? _player.stop : _play,
             ),
-            Text(ip, textDirection: TextDirection.ltr,),
+            Text(
+              ip,
+              textDirection: TextDirection.ltr,
+            ),
           ],
         ),
       ),

@@ -8,7 +8,9 @@ class SocketController {
     WifiController wifiController = new WifiController();
     String ip = await wifiController.getIp();
     final server = await ServerSocket.bind(ip, 3003);
+
     print(ip);
+
     server.listen((client) {
       handleConnection(client);
     });
@@ -16,10 +18,10 @@ class SocketController {
 
   Future<Socket> connectToSocket() async {
     WifiController wifiController = new WifiController();
-    String ip = "192.168.0.11";
+    String ip = await wifiController.getIp();
     final socket = await Socket.connect(ip, 3003);
     print(socket != null ? "Socket connected" : "Error on settingup socket");
-    socket.write("qualquer mensagem");
+    socket.write("mensagem enviada pelo cliente");
     return socket;
   }
 
@@ -47,5 +49,9 @@ class SocketController {
       final serverResponse = String.fromCharCodes(data);
       print("Server: $serverResponse");
     });
+  }
+
+  closeConnection(ServerSocket socket) {
+    socket.close();
   }
 }

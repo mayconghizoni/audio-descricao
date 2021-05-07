@@ -7,13 +7,34 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
+  final String text;
+  Home(this.text);
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() {
+    return _HomeState(this.text);
+  }
 }
 
 class _HomeState extends State<Home> {
+  String text;
+  _HomeState(this.text);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _salaController = new TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _autoValidate = false;
+  String _name = "";
+
+  validateInputNameCall() {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      initTransmition();
+    } else {
+      setState(() {
+        _autoValidate = true;
+      });
+    }
+  }
+
   showMessage() {
     showDialog(
         context: context,
@@ -22,21 +43,30 @@ class _HomeState extends State<Home> {
               content: Card(
                 color: Colors.transparent,
                 elevation: 0.0,
-                child: Column(
-                  children: <Widget>[
-                    TextField(
-                      controller: _salaController,
-                      decoration: InputDecoration(
-                        hintText: "Teatro da Liga",
-                      ),
+                child: Form(
+                  key: _formKey,
+                  child: TextFormField(
+                    controller: _salaController,
+                    decoration: InputDecoration(
+                      hintText: "Teatro da Liga",
                     ),
-                  ],
+                    keyboardType: TextInputType.text,
+                    validator: (String arg) {
+                      if (arg.length < 3)
+                        return 'Digite o nome da sala';
+                      else
+                        return null;
+                    },
+                    onSaved: (String val) {
+                      _name = val;
+                    },
+                  ),
                 ),
               ),
               actions: [
                 CupertinoDialogAction(
                   child: Text("YES"),
-                  onPressed: initTransmition,
+                  onPressed: validateInputNameCall,
                   isDefaultAction: true,
                 ),
                 CupertinoDialogAction(
@@ -93,7 +123,7 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Inicie sua transmissão!",
+            Text("Inicie sua transmissão $text!",
                 style: TextStyle(
                     fontSize: 25.5,
                     fontWeight: FontWeight.w500,
