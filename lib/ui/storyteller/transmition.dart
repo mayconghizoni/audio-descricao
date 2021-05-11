@@ -6,10 +6,15 @@ import 'package:sound_stream/sound_stream.dart';
 
 class Transmition extends StatefulWidget {
   @override
-  _TransmitionState createState() => _TransmitionState();
+  final String text;
+  Transmition(this.text);
+  _TransmitionState createState() => _TransmitionState(this.text);
 }
 
 class _TransmitionState extends State<Transmition> {
+  String text;
+  _TransmitionState(this.text);
+
   RecorderStream _recorder = RecorderStream();
   PlayerStream _player = PlayerStream();
 

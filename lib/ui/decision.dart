@@ -45,7 +45,6 @@ class _DecisionState extends State<Decision> {
   }
 
   showHomeListener() {
-    debugPrint(_name);
     Navigator.push(
         context,
         MaterialPageRoute(

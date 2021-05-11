@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
   }
 
   nextPage() async {
-    print("nextPage");
+    String textToSend = _salaController.text;
     SocketController socketController = new SocketController();
     await socketController.createScocket();
 
@@ -104,7 +104,7 @@ class _HomeState extends State<Home> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new Transmition(),
+          builder: (context) => new Transmition(textToSend),
         ));
   }
 
