@@ -1,23 +1,89 @@
+import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:acessibility_project/socket_service/WifiController.dart';
+import 'package:sound_stream/sound_stream.dart';
 
-class SocketController{
+class SocketController {
 
-  void createScocket() async
+  static RecorderStream _recorder = RecorderStream();
+  static PlayerStream _player = PlayerStream();
+  static WifiController wifiController = new WifiController();
+
+  Future<void> createScocket() async 
   {
-    WifiController wifiController = new WifiController();
+
     String ip = await wifiController.getIp();
-    final socket = ServerSocket.bind(ip, 3003);
-    print(ip);
+    final server = await ServerSocket.bind(ip, 3003);
+
+    server.listen((client) 
+    {
+      handleConnection(client);
+    });
+
   }
 
-  void connectToSocket() async
+  Future<Socket> connectToSocket() async 
   {
-    WifiController wifiController = new WifiController();
     String ip = await wifiController.getIp();
     final socket = await Socket.connect(ip, 3003);
+    
+    print(socket != null ? "Socket connected" : "Error on settingup socket");
+    socket.write("mensagem enviada pelo cliente");
+    
+    return socket;
   }
 
+  handleConnection(Socket socket) 
+  {
+    _recorder.initialize();
+    _recorder.start();
+    
+    _player.initialize();
+    _player.start();
+    bool _isPlaying = true;
 
+    socket.listen
+    (
+      (Uint8List data) async 
+      {
+        _recorder.audioStream.listen((data)
+        {
+          if (_isPlaying) 
+          {
+            _player.audioStream.add(data);
+            socket.add(data);
+          } 
+        });
+      },
+
+      onError: (error) 
+      {
+        print(error);
+        socket.close();
+      },
+      onDone: () 
+      {
+        print("Client left");
+        socket.close();
+      },
+    );
+  }
+
+  listenConnection(Socket socket) async 
+  {
+    _player.initialize();
+    _player.start();
+
+    socket.listen((Uint8List data) 
+    {
+      _player.audioStream.add(data);
+    });
+  }
+
+  closeConnection(ServerSocket socket) 
+  {
+    socket.close();
+  }
 }
