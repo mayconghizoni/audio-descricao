@@ -15,75 +15,10 @@ class _TransmitionState extends State<Transmition> {
   String text;
   _TransmitionState(this.text);
 
-  /*RecorderStream _recorder = RecorderStream();
-  PlayerStream _player = PlayerStream();
-
-  List<Uint8List> _micChunks = [];
-  bool _isRecording = false;
-  bool _isPlaying = false;
-
-  StreamSubscription _recorderStatus;
-  StreamSubscription _playerStatus;
-  StreamSubscription _audioStream;
-
-  @override
-  void initState() {
-    super.initState();
-    initPlugin();
-  }
-
-  @override
-  void dispose() {
-    _recorderStatus?.cancel();
-    _playerStatus?.cancel();
-    _audioStream?.cancel();
-    super.dispose();
-  }
-
-  Future<void> initPlugin() async {
-    _recorderStatus = _recorder.status.listen((status) {
-      if (mounted)
-        setState(() {
-          _isRecording = status == SoundStreamStatus.Playing;
-        });
-    });
-
-    _audioStream = _recorder.audioStream.listen((data) {
-      if (_isPlaying) {
-        _player.writeChunk(data);
-      } else {
-        _micChunks.add(data);
-      }
-    });
-
-    _playerStatus = _player.status.listen((status) {
-      if (mounted)
-        setState(() {
-          _isPlaying = status == SoundStreamStatus.Playing;
-        });
-    });
-
-    await Future.wait([
-      _recorder.initialize(),
-      _player.initialize(),
-    ]);
-  }
-
-  void _play() async {
-    await _player.start();
-
-    if (_micChunks.isNotEmpty) {
-      for (var chunk in _micChunks) {
-        await _player.writeChunk(chunk);
-      }
-      _micChunks.clear();
-    }
-  }*/
-
   @override
   Widget build(BuildContext context) {
-     bool _isRecording = false;
-  bool _isPlaying = false;
+    bool _isRecording = false;
+    bool _isPlaying = false;
     return Scaffold(
       appBar: new AppBar(
         title: Text("Áudio Descrição"),
@@ -99,16 +34,16 @@ class _TransmitionState extends State<Transmition> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                IconButton(
-                  iconSize: 96.0,
-                  icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
-                 // onPressed: _isRecording ? _recorder.stop : _recorder.start,
-                ),
-                IconButton(
-                  iconSize: 96.0,
-                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                  //onPressed: _isPlaying ? _player.stop : _play,
-                ),
+                // IconButton(
+                //   iconSize: 96.0,
+                //   icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
+                //   // onPressed: _isRecording ? _recorder.stop : _recorder.start,
+                // ),
+                // IconButton(
+                //   iconSize: 96.0,
+                //   icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                //   //onPressed: _isPlaying ? _player.stop : _play,
+                // ),
               ],
             ),
             Padding(
