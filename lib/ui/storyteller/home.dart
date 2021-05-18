@@ -7,17 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
-  final String text;
-  Home(this.text);
   @override
-  _HomeState createState() {
-    return _HomeState(this.text);
-  }
+  _HomeState createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  String text;
-  _HomeState(this.text);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _salaController = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -92,8 +86,7 @@ class _HomeState extends State<Home> {
     Navigator.of(context).pop(false);
   }
 
-  nextPage() async 
-  {
+  nextPage() async {
     String textToSend = _salaController.text;
     SocketController socketController = new SocketController();
     await socketController.createScocket();
@@ -120,7 +113,7 @@ class _HomeState extends State<Home> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Inicie sua transmissão $text!",
+            Text("Inicie sua transmissão!",
                 style: TextStyle(
                     fontSize: 25.5,
                     fontWeight: FontWeight.w500,
