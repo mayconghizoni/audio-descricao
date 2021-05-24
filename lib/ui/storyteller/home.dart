@@ -90,11 +90,13 @@ class _HomeState extends State<Home> {
     String textToSend = _salaController.text;
     SocketController socketController = new SocketController();
     await socketController.createScocket();
-
+    Socket socket = await socketController.connectToSocket();
+    socketController.listenConnection(socket);
+    ServerSocket server = socketController.getServer();
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new Transmition(textToSend),
+          builder: (context) => new Transmition(textToSend, server),
         ));
   }
 

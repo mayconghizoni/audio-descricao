@@ -1,19 +1,23 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 import 'package:sound_stream/sound_stream.dart';
 
 class Transmition extends StatefulWidget {
   @override
   final String text;
-  Transmition(this.text);
-  _TransmitionState createState() => _TransmitionState(this.text);
+  Transmition(this.text, this.socket);
+  ServerSocket socket;
+  _TransmitionState createState() => _TransmitionState(this.text, this.socket);
 }
 
 class _TransmitionState extends State<Transmition> {
   String text;
-  _TransmitionState(this.text);
+  _TransmitionState(this.text, this.socket);
+  ServerSocket socket;
 
   @override
   Widget build(BuildContext context) {
@@ -78,5 +82,7 @@ class _TransmitionState extends State<Transmition> {
     );
   }
 
-  closeSocket() {}
+  closeSocket() async {
+    await socket.close();
+  }
 }

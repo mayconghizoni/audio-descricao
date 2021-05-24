@@ -9,10 +9,15 @@ class SocketController {
   static RecorderStream _recorder = RecorderStream();
   static PlayerStream _player = PlayerStream();
   static WifiController wifiController = new WifiController();
+  ServerSocket server;
+
+  getServer() {
+    return server;
+  }
 
   Future<void> createScocket() async {
     String ip = await wifiController.getIp();
-    final server = await ServerSocket.bind(ip, 3003);
+    server = await ServerSocket.bind(ip, 3003);
 
     server.listen((client) {
       handleConnection(client);
@@ -20,7 +25,7 @@ class SocketController {
   }
 
   Future<Socket> connectToSocket() async {
-    String ip = "192.168.0.11";
+    String ip = "192.168.0.102";
     final socket = await Socket.connect(ip, 3003);
 
     print(socket != null ? "Socket connected" : "Error on settingup socket");
@@ -64,9 +69,5 @@ class SocketController {
     socket.listen((Uint8List data) {
       _player.audioStream.add(data);
     });
-  }
-
-  closeConnection(ServerSocket socket) {
-    socket.close();
   }
 }
