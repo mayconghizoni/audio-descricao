@@ -29,50 +29,43 @@ class _DecisionState extends State<Decision> {
     return Scaffold(
       appBar: new AppBar(
         title: Text("Áudio Descrição"),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.deepOrangeAccent,
         // actions: <Widget>[],
       ),
-      backgroundColor: Colors.lightBlueAccent[100],
+      backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Text("Inicie sua transmissão!",
-                  style: TextStyle(
-                      fontSize: 25.5,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.deepOrangeAccent)),
-            ),
-            // ignore: deprecated_member_use
-            Padding(
-              padding: const EdgeInsets.all(25.0),
+              padding: const EdgeInsets.all(40.0),
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 onPressed: showHomeListener,
-                color: Colors.deepOrange,
+                color: Colors.deepOrangeAccent,
+                padding: const EdgeInsets.all(25.0),
                 child: Text(
                   "Ouvinte",
                   style: TextStyle(
-                    fontSize: 40.0,
+                    fontSize: 45.0,
                     color: Colors.white,
                   ),
                 ),
               ),
             ),
-
-            // ignore: deprecated_member_use
             Padding(
-              padding: const EdgeInsets.all(25.0),
+              padding: const EdgeInsets.all(40.0),
+              // ignore: deprecated_member_use
               child: RaisedButton(
                 onPressed: showHomeStoryteller,
-                color: Colors.deepOrange,
+                color: Colors.deepOrangeAccent,
+                padding: const EdgeInsets.all(25.0),
                 child: Text(
                   "Narrador",
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 40.0,
+                    fontSize: 45.0,
                   ),
                 ),
               ),

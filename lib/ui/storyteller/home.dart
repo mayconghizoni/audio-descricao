@@ -92,11 +92,10 @@ class _HomeState extends State<Home> {
     await socketController.createScocket();
     Socket socket = await socketController.connectToSocket();
     socketController.listenConnection(socket);
-    ServerSocket server = socketController.getServer();
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new Transmition(textToSend, server),
+          builder: (context) => new Transmition(textToSend),
         ));
   }
 
@@ -105,21 +104,66 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
-        title: Text("Áudio Descrição"),
-        backgroundColor: Colors.deepOrange,
+        title: Text("Central de Transmissão"),
+        backgroundColor: Colors.deepOrangeAccent,
         // actions: <Widget>[],
       ),
-      backgroundColor: Colors.lightBlueAccent[100],
+      backgroundColor: Colors.white,
       body: Container(
-        alignment: Alignment.center,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Inicie sua transmissão!",
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 80, 0, 20),
+              child: Text("Ao iniciar sua transmissão:",
+                  style: TextStyle(
+                      fontSize: 20.5,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.deepOrangeAccent)),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Text(
+                "- Se conecte a rede local de transmissão;",
                 style: TextStyle(
-                    fontSize: 25.5,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.deepOrangeAccent))
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.deepOrangeAccent),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Text(
+                "- Tenha conectado ao aparelho fones de ouvido;",
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.deepOrangeAccent),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Text(
+                "- Encerre outros apps para melhor desempenho;",
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.deepOrangeAccent),
+              ),
+            ),
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+              child: Text(
+                "- Assim que iniciar iniciar seu microfone será ativo;",
+                style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.w300,
+                    color: Colors.deepOrangeAccent),
+              ),
+            )
           ],
         ),
       ),

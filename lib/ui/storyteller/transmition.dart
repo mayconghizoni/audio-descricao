@@ -9,15 +9,13 @@ import 'package:sound_stream/sound_stream.dart';
 class Transmition extends StatefulWidget {
   @override
   final String text;
-  Transmition(this.text, this.socket);
-  ServerSocket socket;
-  _TransmitionState createState() => _TransmitionState(this.text, this.socket);
+  Transmition(this.text);
+  _TransmitionState createState() => _TransmitionState(this.text);
 }
 
 class _TransmitionState extends State<Transmition> {
   String text;
-  _TransmitionState(this.text, this.socket);
-  ServerSocket socket;
+  _TransmitionState(this.text);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +24,7 @@ class _TransmitionState extends State<Transmition> {
     return Scaffold(
       appBar: new AppBar(
         title: Text("Áudio Descrição"),
-        backgroundColor: Colors.deepOrange,
+        backgroundColor: Colors.deepOrangeAccent,
         // actions: <Widget>[],
       ),
       backgroundColor: Colors.lightBlueAccent[100],
@@ -54,7 +52,7 @@ class _TransmitionState extends State<Transmition> {
               padding: const EdgeInsets.all(15.0),
               // ignore: deprecated_member_use
               child: RaisedButton(
-                onPressed: closeSocket,
+                onPressed: () => {},
                 child: Text(
                   "Finalizar Transmissão",
                   style: TextStyle(
@@ -80,9 +78,5 @@ class _TransmitionState extends State<Transmition> {
         ],
       ),
     );
-  }
-
-  closeSocket() async {
-    await socket.close();
   }
 }
