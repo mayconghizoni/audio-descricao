@@ -27,7 +27,7 @@ class _TransmitionState extends State<Transmition> {
         backgroundColor: Colors.deepOrangeAccent,
         // actions: <Widget>[],
       ),
-      backgroundColor: Colors.lightBlueAccent[100],
+      backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -36,22 +36,24 @@ class _TransmitionState extends State<Transmition> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                // IconButton(
-                //   iconSize: 96.0,
-                //   icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
-                //   // onPressed: _isRecording ? _recorder.stop : _recorder.start,
-                // ),
-                // IconButton(
-                //   iconSize: 96.0,
-                //   icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                //   //onPressed: _isPlaying ? _player.stop : _play,
-                // ),
+                IconButton(
+                  iconSize: 96.0,
+                  icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
+                  // onPressed: _isRecording ? _recorder.stop : _recorder.start,
+                ),
+                IconButton(
+                  iconSize: 96.0,
+                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                  //onPressed: _isPlaying ? _player.stop : _play,
+                ),
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(20.0),
               // ignore: deprecated_member_use
               child: RaisedButton(
+                color: Colors.deepOrangeAccent,
+                padding: const EdgeInsets.all(25.0),
                 onPressed: () => {},
                 child: Text(
                   "Finalizar Transmissão",
@@ -60,7 +62,6 @@ class _TransmitionState extends State<Transmition> {
                     color: Colors.white,
                   ),
                 ),
-                color: Colors.deepOrangeAccent,
               ),
             ),
           ],
