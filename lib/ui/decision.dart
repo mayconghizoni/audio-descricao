@@ -8,39 +8,11 @@ class Decision extends StatefulWidget {
 }
 
 class _DecisionState extends State<Decision> {
-  final TextEditingController _usuarioController = new TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  bool _autoValidate = false;
-  String _name = "";
-
-  validateInputsStoryteller() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      showHomeStoryteller();
-    } else {
-      setState(() {
-        _autoValidate = true;
-      });
-    }
-  }
-
-  validateInputsListener() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
-      showHomeListener();
-    } else {
-      setState(() {
-        _autoValidate = true;
-      });
-    }
-  }
-
   showHomeStoryteller() {
-    String textToSend = _usuarioController.text;
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new Home(textToSend),
+          builder: (context) => new Home(),
         ));
   }
 
@@ -55,87 +27,52 @@ class _DecisionState extends State<Decision> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: new AppBar(
-          title: Text("Áudio Descrição"),
-          backgroundColor: Colors.deepOrange,
-          // actions: <Widget>[],
-        ),
-        backgroundColor: Colors.lightBlueAccent[100],
-        body: Form(
-          key: _formKey,
-          child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  "Seja bem vindo!",
+      appBar: new AppBar(
+        title: Text("Áudio Descrição"),
+        backgroundColor: Colors.deepOrangeAccent,
+        // actions: <Widget>[],
+      ),
+      backgroundColor: Colors.white,
+      body: Container(
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                onPressed: showHomeListener,
+                color: Colors.deepOrangeAccent,
+                padding: const EdgeInsets.all(25.0),
+                child: Text(
+                  "Ouvinte",
                   style: TextStyle(
-                    fontSize: 24.5,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.deepOrangeAccent,
+                    fontSize: 45.0,
+                    color: Colors.white,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: TextFormField(
-                    controller: _usuarioController,
-                    decoration: InputDecoration(
-                      hintText: 'Nome',
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(4.5)),
-                    ),
-                    keyboardType: TextInputType.text,
-                    validator: (String arg) {
-                      if (arg.length < 3)
-                        return 'Digite seu nome';
-                      else
-                        return null;
-                    },
-                    onSaved: (String val) {
-                      _name = val;
-                    },
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(40.0),
+              // ignore: deprecated_member_use
+              child: RaisedButton(
+                onPressed: showHomeStoryteller,
+                color: Colors.deepOrangeAccent,
+                padding: const EdgeInsets.all(25.0),
+                child: Text(
+                  "Narrador",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 45.0,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: <Widget>[
-                        //Entrar
-                        Container(
-                          // ignore: deprecated_member_use
-                          child: RaisedButton(
-                            onPressed: validateInputsStoryteller,
-                            color: Colors.deepOrange,
-                            child: Text(
-                              "Narrador",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20.0,
-                              ),
-                            ),
-                          ),
-                        ),
-                        //Cancelar
-                        Container(
-                          // ignore: deprecated_member_use
-                          child: RaisedButton(
-                            onPressed: validateInputsListener,
-                            color: Colors.deepOrange,
-                            child: Text(
-                              "Ouvinte",
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                )
-              ]),
-        ));
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
