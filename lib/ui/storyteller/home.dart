@@ -7,11 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
+  final String text;
+  Home(this.text);
   @override
-  _HomeState createState() => _HomeState();
+  _HomeState createState() {
+    return _HomeState(this.text);
+  }
 }
 
 class _HomeState extends State<Home> {
+  String text;
+  _HomeState(this.text);
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final TextEditingController _salaController = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -86,12 +92,12 @@ class _HomeState extends State<Home> {
     Navigator.of(context).pop(false);
   }
 
-  nextPage() async {
+  nextPage() async 
+  {
     String textToSend = _salaController.text;
     SocketController socketController = new SocketController();
     await socketController.createScocket();
-    Socket socket = await socketController.connectToSocket();
-    socketController.listenConnection(socket);
+
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -104,66 +110,21 @@ class _HomeState extends State<Home> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: new AppBar(
-        title: Text("Central de Transmissão"),
-        backgroundColor: Colors.deepOrangeAccent,
+        title: Text("Áudio Descrição"),
+        backgroundColor: Colors.deepOrange,
         // actions: <Widget>[],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.lightBlueAccent[100],
       body: Container(
+        alignment: Alignment.center,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 80, 0, 20),
-              child: Text("Ao iniciar sua transmissão:",
-                  style: TextStyle(
-                      fontSize: 20.5,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.deepOrangeAccent)),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Text(
-                "- Se conecte a rede local de transmissão;",
+            Text("Inicie sua transmissão $text!",
                 style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.deepOrangeAccent),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Text(
-                "- Tenha conectado ao aparelho fones de ouvido;",
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.deepOrangeAccent),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Text(
-                "- Encerre outros apps para melhor desempenho;",
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.deepOrangeAccent),
-              ),
-            ),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              child: Text(
-                "- Assim que iniciar iniciar seu microfone será ativo;",
-                style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.deepOrangeAccent),
-              ),
-            )
+                    fontSize: 25.5,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.deepOrangeAccent))
           ],
         ),
       ),
