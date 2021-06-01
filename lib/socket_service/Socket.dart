@@ -49,7 +49,6 @@ class SocketController {
   }
 
   Future<Socket> connectToSocket() async {
-    
     String ip = await wifiController.getIp();
     var initTime = DateTime.now().millisecondsSinceEpoch;
     final socket = await Socket.connect(ip, 3003);

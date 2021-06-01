@@ -9,6 +9,16 @@ class HomeReceptor extends StatefulWidget {
 }
 
 class _HomeReceptorState extends State<HomeReceptor> {
+  // ignore: deprecated_member_use
+  List<String> rooms = new List<String>();
+
+  @override
+  void initState() {
+    SocketController socketController = new SocketController();
+    // rooms = socketController.listConnections();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,10 +63,9 @@ class _HomeReceptorState extends State<HomeReceptor> {
     );
   }
 
-  connectToSocket() async {
-    SocketController socketController = new SocketController();
-    Socket socket = await socketController.connectToSocket();
-
-    socketController.listenConnection(socket);
-  }
+  // connectToSocket() async {
+  //   SocketController socketController = new SocketController();
+  //   Socket socket = await socketController.connectToSocket();
+  //   socketController.listenConnection(socket);
+  // }
 }
