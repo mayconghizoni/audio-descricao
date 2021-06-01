@@ -11,17 +11,82 @@ class _TransmitionState extends State<Transmition> {
   String text;
   _TransmitionState(this.text);
 
+  /*RecorderStream _recorder = RecorderStream();
+  PlayerStream _player = PlayerStream();
+
+  List<Uint8List> _micChunks = [];
+  bool _isRecording = false;
+  bool _isPlaying = false;
+
+  StreamSubscription _recorderStatus;
+  StreamSubscription _playerStatus;
+  StreamSubscription _audioStream;
+
+  @override
+  void initState() {
+    super.initState();
+    initPlugin();
+  }
+
+  @override
+  void dispose() {
+    _recorderStatus?.cancel();
+    _playerStatus?.cancel();
+    _audioStream?.cancel();
+    super.dispose();
+  }
+
+  Future<void> initPlugin() async {
+    _recorderStatus = _recorder.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isRecording = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    _audioStream = _recorder.audioStream.listen((data) {
+      if (_isPlaying) {
+        _player.writeChunk(data);
+      } else {
+        _micChunks.add(data);
+      }
+    });
+
+    _playerStatus = _player.status.listen((status) {
+      if (mounted)
+        setState(() {
+          _isPlaying = status == SoundStreamStatus.Playing;
+        });
+    });
+
+    await Future.wait([
+      _recorder.initialize(),
+      _player.initialize(),
+    ]);
+  }
+
+  void _play() async {
+    await _player.start();
+
+    if (_micChunks.isNotEmpty) {
+      for (var chunk in _micChunks) {
+        await _player.writeChunk(chunk);
+      }
+      _micChunks.clear();
+    }
+  }*/
+
   @override
   Widget build(BuildContext context) {
-    bool _isRecording = false;
-    bool _isPlaying = false;
+     bool _isRecording = false;
+  bool _isPlaying = false;
     return Scaffold(
       appBar: new AppBar(
         title: Text("Áudio Descrição"),
-        backgroundColor: Colors.deepOrangeAccent,
+        backgroundColor: Colors.deepOrange,
         // actions: <Widget>[],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.lightBlueAccent[100],
       body: Container(
         alignment: Alignment.center,
         child: Column(
@@ -33,7 +98,7 @@ class _TransmitionState extends State<Transmition> {
                 IconButton(
                   iconSize: 96.0,
                   icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
-                  // onPressed: _isRecording ? _recorder.stop : _recorder.start,
+                 // onPressed: _isRecording ? _recorder.stop : _recorder.start,
                 ),
                 IconButton(
                   iconSize: 96.0,
@@ -43,12 +108,10 @@ class _TransmitionState extends State<Transmition> {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(15.0),
               // ignore: deprecated_member_use
               child: RaisedButton(
-                color: Colors.deepOrangeAccent,
-                padding: const EdgeInsets.all(25.0),
-                onPressed: () => {},
+                onPressed: closeSocket,
                 child: Text(
                   "Finalizar Transmissão",
                   style: TextStyle(
@@ -56,6 +119,7 @@ class _TransmitionState extends State<Transmition> {
                     color: Colors.white,
                   ),
                 ),
+                color: Colors.deepOrangeAccent,
               ),
             ),
           ],
@@ -74,4 +138,6 @@ class _TransmitionState extends State<Transmition> {
       ),
     );
   }
+
+  closeSocket() {}
 }
