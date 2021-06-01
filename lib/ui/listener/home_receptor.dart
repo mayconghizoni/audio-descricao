@@ -23,38 +23,27 @@ class _HomeReceptorState extends State<HomeReceptor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: new AppBar(
-        title: Text("Áudio Descrição"),
-        backgroundColor: Colors.deepOrange,
+        title: Text("Central do ouvinte"),
+        backgroundColor: Colors.deepOrangeAccent,
         // actions: <Widget>[],
       ),
-      backgroundColor: Colors.lightBlueAccent[100],
+      backgroundColor: Colors.white,
       body: Container(
         alignment: Alignment.center,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text("Nome da sala",
-                  style: TextStyle(
-                    fontSize: 25.0,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.deepOrangeAccent,
-                  )),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              // ignore: deprecated_member_use
-              child: RaisedButton(
-                onPressed: connectToSocket,
-                child: Text(
-                  "ENTRAR",
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
+            // ignore: deprecated_member_use
+            RaisedButton(
+              padding: const EdgeInsets.all(25.0),
+              color: Colors.deepOrangeAccent,
+              onPressed: connectToSocket,
+              child: Text(
+                "Conectar-se",
+                style: TextStyle(
+                  fontSize: 45.0,
+                  color: Colors.white,
                 ),
-                color: Colors.deepOrangeAccent,
               ),
             ),
           ],
