@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
@@ -33,19 +31,7 @@ class _HomeReceptorState extends State<HomeReceptor> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            // ignore: deprecated_member_use
-            RaisedButton(
-              padding: const EdgeInsets.all(25.0),
-              color: Colors.deepOrangeAccent,
-              onPressed: connectToSocket,
-              child: Text(
-                "Conectar-se",
-                style: TextStyle(
-                  fontSize: 45.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            //Continuar
           ],
         ),
       ),

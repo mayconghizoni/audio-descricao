@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
 class TransmitionReceptor extends StatefulWidget {

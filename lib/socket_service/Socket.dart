@@ -20,39 +20,35 @@ class SocketController {
     });
   }
 
-  Future<void> listConnecions() async
-  {
-
+  Future<List<String>> listConnecions() async {
     List<String> rooms = new List<String>();
     String ip = await wifiController.getIp();
     ip = ip.substring(0, ip.lastIndexOf(".") + 1);
     String port = "3003";
 
-    for (int i = 1; i < 255 ; i++)
-    {
+    for (int i = 1; i < 255; i++) {
       String tempIP = ip + i.toString();
-      try
-      {
-        
-        final socket = await Socket.connect(tempIP, 3003, timeout: new Duration(milliseconds: 200));
-        if(socket != null)
-        {
+      try {
+        final socket = await Socket.connect(tempIP, 3003,
+            timeout: new Duration(milliseconds: 200));
+        if (socket != null) {
           rooms.add(tempIP);
+          socket.close();
         }
-      }
-      catch(Exception)
-      {
+      } catch (Exception) {
         continue;
       }
     }
     print(rooms);
+    return rooms;
   }
 
   Future<Socket> connectToSocket() async {
     String ip = await wifiController.getIp();
     var initTime = DateTime.now().millisecondsSinceEpoch;
     final socket = await Socket.connect(ip, 3003);
-    print("Connected in " + (DateTime.now().millisecondsSinceEpoch - initTime).toString());
+    print("Connected in " +
+        (DateTime.now().millisecondsSinceEpoch - initTime).toString());
     print(socket != null ? "Socket connected" : "Error on settingup socket");
     socket.write("mensagem enviada pelo cliente");
 
