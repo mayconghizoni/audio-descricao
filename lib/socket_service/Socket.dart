@@ -21,7 +21,7 @@ class SocketController {
   }
 
   Future<Socket> connectToSocket() async {
-    String ip = "192.168.0.100";
+    String ip = "192.168.0.101";
     final socket = await Socket.connect(ip, 3003);
 
     print(socket != null ? "Socket connected" : "Error on settingup socket");
@@ -42,7 +42,6 @@ class SocketController {
       (Uint8List data) async {
         _recorder.audioStream.listen((data) {
           if (_isPlaying) {
-            _player.audioStream.add(data);
             socket.add(data);
           }
         });

@@ -1,10 +1,4 @@
-import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
-
-import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
-import 'package:sound_stream/sound_stream.dart';
 
 class Transmition extends StatefulWidget {
   @override

@@ -9,6 +9,16 @@ class HomeReceptor extends StatefulWidget {
 }
 
 class _HomeReceptorState extends State<HomeReceptor> {
+  // ignore: deprecated_member_use
+  List<String> rooms = new List<String>();
+
+  @override
+  void initState() {
+    SocketController socketController = new SocketController();
+    // rooms = socketController.listConnections();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,29 +33,16 @@ class _HomeReceptorState extends State<HomeReceptor> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            // ignore: deprecated_member_use
-            RaisedButton(
-              padding: const EdgeInsets.all(25.0),
-              color: Colors.deepOrangeAccent,
-              onPressed: connectToSocket,
-              child: Text(
-                "Conectar-se",
-                style: TextStyle(
-                  fontSize: 45.0,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+            //Continua
           ],
         ),
       ),
     );
   }
 
-  connectToSocket() async {
-    SocketController socketController = new SocketController();
-    Socket socket = await socketController.connectToSocket();
-
-    socketController.listenConnection(socket);
-  }
+  // connectToSocket() async {
+  //   SocketController socketController = new SocketController();
+  //   Socket socket = await socketController.connectToSocket();
+  //   socketController.listenConnection(socket);
+  // }
 }
