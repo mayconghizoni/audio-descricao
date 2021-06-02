@@ -1,21 +1,15 @@
-import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
 class HomeReceptor extends StatefulWidget {
+  final List<String> rooms;
+  HomeReceptor(this.rooms);
   @override
-  _HomeReceptorState createState() => _HomeReceptorState();
+  _HomeReceptorState createState() => _HomeReceptorState(this.rooms);
 }
 
 class _HomeReceptorState extends State<HomeReceptor> {
-  // ignore: deprecated_member_use
-  List<String> rooms = new List<String>();
-
-  @override
-  void initState() {
-    SocketController socketController = new SocketController();
-    // rooms = socketController.listConnections();
-    super.initState();
-  }
+  List<String> rooms;
+  _HomeReceptorState(this.rooms);
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +24,9 @@ class _HomeReceptorState extends State<HomeReceptor> {
         alignment: Alignment.center,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            //Continuar
-          ],
+          children: rooms.map((quote) {
+            return Text(quote);
+          }).toList(),
         ),
       ),
     );
