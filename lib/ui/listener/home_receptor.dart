@@ -1,21 +1,15 @@
-import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
 class HomeReceptor extends StatefulWidget {
+  final List<String> rooms;
+  HomeReceptor(this.rooms);
   @override
-  _HomeReceptorState createState() => _HomeReceptorState();
+  _HomeReceptorState createState() => _HomeReceptorState(this.rooms);
 }
 
 class _HomeReceptorState extends State<HomeReceptor> {
-  // ignore: deprecated_member_use
-  List<String> rooms = new List<String>();
-
-  @override
-  void initState() {
-    SocketController socketController = new SocketController();
-    // rooms = socketController.listConnections();
-    super.initState();
-  }
+  List<String> rooms;
+  _HomeReceptorState(this.rooms);
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +20,40 @@ class _HomeReceptorState extends State<HomeReceptor> {
         // actions: <Widget>[],
       ),
       backgroundColor: Colors.white,
-      body: Container(
-        alignment: Alignment.center,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            //Continuar
-          ],
-        ),
-      ),
+      body: buildListView(),
+      // alignment: Alignment.center,
+      // child: Column(
+      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      //   children: rooms.map((quote) {
+      //     return Text(
+      //       quote,
+      //       style: TextStyle(
+      //         backgroundColor: Colors.deepOrangeAccent,
+      //         color: Colors.white,
+      //         fontSize: 40.0,
+      //       ),
+      //     );
+      //   }).toList(),
+      // ),
+    );
+  }
+
+  ListView buildListView() {
+    return ListView.builder(
+      itemCount: rooms.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ListTile(
+            title: Text(
+              '${rooms[index]}',
+              style: TextStyle(fontSize: 25.0),
+            ),
+            leading: Icon(Icons.meeting_room),
+            onTap: () => {},
+          ),
+        );
+      },
     );
   }
 
