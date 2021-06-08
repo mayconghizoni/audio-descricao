@@ -55,7 +55,8 @@ class SocketController {
     return socket;
   }
 
-  handleConnection(Socket socket) {
+  handleConnection(Socket socket) 
+  {
     _recorder.initialize();
     _recorder.start();
 
@@ -74,10 +75,12 @@ class SocketController {
       onError: (error) {
         print(error);
         socket.close();
+        socket.destroy();
       },
       onDone: () {
         print("Client left");
         socket.close();
+        socket.destroy();
       },
     );
   }
@@ -86,8 +89,26 @@ class SocketController {
     _player.initialize();
     _player.start();
 
-    socket.listen((Uint8List data) {
-      _player.audioStream.add(data);
-    });
+    socket.listen(
+        (Uint8List data) {
+        _player.audioStream.add(data);
+      },
+      onError: ()
+      {
+        socket.close();
+        socket.destroy();
+      },
+      onDone: ()
+      {
+        socket.close();
+        socket.destroy();
+      }
+    );
+  }
+
+  closeConnections(ServerSocket server)
+  {
+    server.close();
+    server.drain();
   }
 }
