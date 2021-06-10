@@ -17,19 +17,11 @@ class _DecisionState extends State<Decision> {
         ));
   }
 
-  showHomeListener() async {
+  showHomeListener() async 
+  {
     SocketController socketController = new SocketController();
-    List<String> rooms = await socketController.listConnecions();
-    // [
-    //   "192.168.100.2",
-    //   "192.168.100.1",
-    //   "192.168.100.3",
-    //   "192.169.100.4"
-    // ];
-
-    // Future.delayed(Duration(seconds: 60));
-    //Esperar rooms ficarem completas para continuar
-
+    List<String> rooms = (await socketController.listConnecions()).first;
+    
     Navigator.push(
         context,
         MaterialPageRoute(

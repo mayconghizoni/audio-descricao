@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class Transmition extends StatefulWidget {
   @override
-  final String text;
-  Transmition(this.text);
-  _TransmitionState createState() => _TransmitionState(this.text);
+  Transmition();
+  _TransmitionState createState() => _TransmitionState();
 }
 
 class _TransmitionState extends State<Transmition> {
-  String text;
-  _TransmitionState(this.text);
+  _TransmitionState();
 
   @override
   Widget build(BuildContext context) {

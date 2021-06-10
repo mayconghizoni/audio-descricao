@@ -2,6 +2,7 @@ class GlobalUtils
 {
 
   static String appName = "Áudio Descrição";
+  static String roomName = "";
 
   static String getAppName()
   {
@@ -12,5 +13,9 @@ class GlobalUtils
   {
     return DateTime.now().millisecondsSinceEpoch;
   } 
+
+  static void setRoomName(String room){roomName = room;}
+
+  static String getRoomName(){return roomName;}
 
 }

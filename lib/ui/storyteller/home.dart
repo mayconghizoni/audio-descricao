@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:acessibility_project/GlobalUtils.dart';
 import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:acessibility_project/ui/storyteller/transmition.dart';
 import 'package:flutter/cupertino.dart';
@@ -87,7 +88,8 @@ class _HomeState extends State<Home> {
   }
 
   nextPage() async {
-    String textToSend = _salaController.text;
+    String roomName = _salaController.text;
+    GlobalUtils.setRoomName(roomName);
     SocketController socketController = new SocketController();
     await socketController.createScocket();
     Socket socket = await socketController.connectToSocket();
@@ -95,7 +97,7 @@ class _HomeState extends State<Home> {
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new Transmition(textToSend),
+          builder: (context) => new Transmition(),
         ));
   }
 
