@@ -17,15 +17,15 @@ class _DecisionState extends State<Decision> {
         ));
   }
 
-  showHomeListener() async {
-
-  SocketController socketController = new SocketController();
-  List<String> rooms = (await socketController.listConnecions()).first;
-
+  showHomeListener() async 
+  {
+    SocketController socketController = new SocketController();
+    List<String> rooms = (await socketController.listConnecions()).first;
+    
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new HomeReceptor(),
+          builder: (context) => new HomeReceptor(rooms),
         ));
   }
 

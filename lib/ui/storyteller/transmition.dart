@@ -31,11 +31,13 @@ class _TransmitionState extends State<Transmition> {
                 IconButton(
                   iconSize: 96.0,
                   icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
+                  onPressed: () => {},
                   // onPressed: _isRecording ? _recorder.stop : _recorder.start,
                 ),
                 IconButton(
                   iconSize: 96.0,
                   icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: () => {},
                   //onPressed: _isPlaying ? _player.stop : _play,
                 ),
               ],
