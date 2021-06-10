@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:acessibility_project/GlobalUtils.dart';
 import 'package:acessibility_project/socket_service/WifiController.dart';
 import 'package:sound_stream/sound_stream.dart';
 
@@ -9,7 +10,7 @@ class SocketController {
   static RecorderStream _recorder = RecorderStream();
   static PlayerStream _player = PlayerStream();
   static WifiController wifiController = new WifiController();
-  ServerSocket server;
+  static ServerSocket server;
 
   Future<void> createScocket() async {
     String ip = await wifiController.getIp();
@@ -20,27 +21,37 @@ class SocketController {
     });
   }
 
-  Future<List<String>> listConnecions() async {
+  Future<List> listConnecions() async {
+    List objects = new List();
     List<String> rooms = new List<String>();
+    List<String> ips = new List<String>();
     String ip = await wifiController.getIp();
     ip = ip.substring(0, ip.lastIndexOf(".") + 1);
     String port = "3003";
 
-    for (int i = 1; i < 255; i++) {
+    for (int i = 1; i < 255; i++) 
+    {
+      var roomName = "";
       String tempIP = ip + i.toString();
       try {
         final socket = await Socket.connect(tempIP, 3003,
             timeout: new Duration(milliseconds: 200));
         if (socket != null) {
-          rooms.add(tempIP);
+          socket.write("Testing connection");
+          socket.listen((Uint8List data) {
+             roomName = String.fromCharCodes(data);
+          });
+          rooms.add(roomName);
+          ips.add(tempIP);
           socket.close();
         }
       } catch (Exception) {
         continue;
       }
     }
-    print(rooms);
-    return rooms;
+    objects.add(rooms);
+    objects.add(ips);
+    return objects;
   }
 
   Future<Socket> connectToSocket() async {
@@ -65,14 +76,21 @@ class SocketController {
     bool _isPlaying = true;
 
     socket.listen(
-      (Uint8List data) async {
-        _recorder.audioStream.listen((data) {
+      (Uint8List data) async 
+      {
+        _recorder.audioStream.listen((data) 
+        {
+          if(String.fromCharCodes(data) == "Testing connection")
+          {
+            socket.write(GlobalUtils.getRoomName());
+          }
           if (_isPlaying) {
             socket.add(data);
           }
         });
       },
-      onError: (error) {
+      onError: (error) 
+      {
         print(error);
         socket.close();
         socket.destroy();
@@ -106,7 +124,7 @@ class SocketController {
     );
   }
 
-  closeConnections(ServerSocket server)
+  static closeConnections()
   {
     server.close();
     server.drain();

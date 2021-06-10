@@ -1,3 +1,4 @@
+import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:acessibility_project/ui/listener/home_receptor.dart';
 import 'package:flutter/material.dart';
 import 'package:acessibility_project/ui/storyteller/home.dart';
@@ -16,7 +17,11 @@ class _DecisionState extends State<Decision> {
         ));
   }
 
-  showHomeListener() {
+  showHomeListener() async {
+
+  SocketController socketController = new SocketController();
+  List<String> rooms = (await socketController.listConnecions()).first;
+
     Navigator.push(
         context,
         MaterialPageRoute(
