@@ -92,8 +92,8 @@ class _HomeState extends State<Home> {
     GlobalUtils.setRoomName(roomName);
     SocketController socketController = new SocketController();
     await socketController.createScocket();
-    Socket socket = await socketController.connectToSocket();
-    socketController.listenConnection(socket);
+    //Socket socket = await socketController.connectToSocket();
+    //socketController.listenConnection(socket);
     Navigator.push(
         context,
         MaterialPageRoute(

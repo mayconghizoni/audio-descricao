@@ -9,6 +9,8 @@ class Decision extends StatefulWidget {
 }
 
 class _DecisionState extends State<Decision> {
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   showHomeStoryteller() {
     Navigator.push(
         context,
@@ -19,6 +21,8 @@ class _DecisionState extends State<Decision> {
 
   showHomeListener() async 
   {
+
+    showSnackBar();
     SocketController socketController = new SocketController();
     List<String> rooms = (await socketController.listConnecions()).first;
     
@@ -29,9 +33,24 @@ class _DecisionState extends State<Decision> {
         ));
   }
 
+  showSnackBar() async {
+
+    final snackBar = SnackBar(content: Row(
+      children: [
+        Icon(Icons.search),
+        SizedBox(width: 20,),
+        Expanded(child: Text("Procurando salas...")),
+      ],
+    ),
+    duration: Duration(seconds: 90),);
+        // ignore: deprecated_member_use
+    _scaffoldKey.currentState.showSnackBar(snackBar);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
       appBar: new AppBar(
         title: Text("Áudio Descrição"),
         backgroundColor: Colors.deepOrangeAccent,

@@ -21,20 +21,6 @@ class _HomeReceptorState extends State<HomeReceptor> {
       ),
       backgroundColor: Colors.white,
       body: buildListView(),
-      // alignment: Alignment.center,
-      // child: Column(
-      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //   children: rooms.map((quote) {
-      //     return Text(
-      //       quote,
-      //       style: TextStyle(
-      //         backgroundColor: Colors.deepOrangeAccent,
-      //         color: Colors.white,
-      //         fontSize: 40.0,
-      //       ),
-      //     );
-      //   }).toList(),
-      // ),
     );
   }
 
@@ -56,10 +42,4 @@ class _HomeReceptorState extends State<HomeReceptor> {
       },
     );
   }
-
-  // connectToSocket() async {
-  //   SocketController socketController = new SocketController();
-  //   Socket socket = await socketController.connectToSocket();
-  //   socketController.listenConnection(socket);
-  // }
 }
