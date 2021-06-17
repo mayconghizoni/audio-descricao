@@ -28,7 +28,7 @@ class SocketController {
     String ip = await wifiController.getIp();
     ip = ip.substring(0, ip.lastIndexOf(".") + 1);
 
-    for (int i = 100; i < 255; i++) 
+    for (int i = 90; i < 120; i++) 
     {
       String tempIP = ip + i.toString();
       try {
@@ -68,8 +68,7 @@ class SocketController {
     );
   }
 
-  Future<Socket> connectToSocket() async {
-    String ip = await wifiController.getIp();
+  Future<Socket> connectToSocket(String ip) async {
     var initTime = DateTime.now().millisecondsSinceEpoch;
     final socket = await Socket.connect(ip, 3003);
     print("Connected in " +

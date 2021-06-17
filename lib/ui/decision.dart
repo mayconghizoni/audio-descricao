@@ -24,12 +24,12 @@ class _DecisionState extends State<Decision> {
 
     showSnackBar();
     SocketController socketController = new SocketController();
-    List<String> rooms = (await socketController.listConnecions()).first;
+    List objects = await socketController.listConnecions();
     
     Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => new HomeReceptor(rooms),
+          builder: (context) => new HomeReceptor(objects),
         ));
   }
 
