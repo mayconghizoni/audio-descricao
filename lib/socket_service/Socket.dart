@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:acessibility_project/GlobalUtils.dart';
 import 'package:acessibility_project/socket_service/WifiController.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:sound_stream/sound_stream.dart';
 
 class SocketController {
@@ -28,7 +29,7 @@ class SocketController {
     String ip = await wifiController.getIp();
     ip = ip.substring(0, ip.lastIndexOf(".") + 1);
 
-    for (int i = 90; i < 120; i++) 
+    for (int i = 50; i < 120; i++) 
     {
       String tempIP = ip + i.toString();
       try {
@@ -93,11 +94,20 @@ class SocketController {
         if(String.fromCharCodes(data) == "Testing connection")
         {
           socket.write(GlobalUtils.getRoomName());
-        }else{
+        }
+        else if (String.fromCharCodes(data) == "mensagem enviada pelo clienteClose Server")
+        {
+          socket.write("  Sai fora");
+          await server.close();
+          await socket.destroy();
+          print("asdk");
+          
+        }
+        else{
           _recorder.audioStream.listen((data)
           {
             if (_isPlaying) {
-              socket.add(data);
+              socket.write("a");
             }
          });
         }
@@ -108,7 +118,7 @@ class SocketController {
         socket.close();
         socket.destroy();
       },
-      onDone: () {
+      onDone: () async {
         print("Client left");
         socket.close();
         socket.destroy();
@@ -125,7 +135,14 @@ class SocketController {
           if(String.fromCharCodes(data).contains("teste")){
             GlobalUtils.setRoomName(String.fromCharCodes(data));
           }
-        _player.audioStream.add(data);
+          else if(String.fromCharCodes(data).contains("fora")){
+              socket.destroy();
+          }
+          else{//
+          print(String.fromCharCodes(data));
+          //_player.audioStream.add(data);
+          }
+        
       },
       onError: (error)
       {
@@ -143,6 +160,5 @@ class SocketController {
   static closeConnections()
   {
     server.close();
-    server.drain();
   }
 }
