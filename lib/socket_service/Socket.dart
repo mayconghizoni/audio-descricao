@@ -7,12 +7,15 @@ import 'package:acessibility_project/socket_service/WifiController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sound_stream/sound_stream.dart';
 
-class SocketController {
+class SocketController 
+{
   static RecorderStream _recorder = RecorderStream();
   static PlayerStream _player = PlayerStream();
   static WifiController wifiController = new WifiController();
   static ServerSocket server;
+  static Socket socket;
   static List<String> roomsNames = new List();
+  static bool isServerClosed = false;
 
   Future<void> createScocket() async {
     String ip = await wifiController.getIp();
@@ -23,7 +26,8 @@ class SocketController {
     });
   }
 
-  Future<List> listConnecions() async {
+  Future<List> listConnecions() async 
+  {
     List objects = new List();
     List<String> ips = new List<String>();
     String ip = await wifiController.getIp();
@@ -71,7 +75,8 @@ class SocketController {
 
   Future<Socket> connectToSocket(String ip) async {
     var initTime = DateTime.now().millisecondsSinceEpoch;
-    final socket = await Socket.connect(ip, 3003);
+    socket = await Socket.connect(ip, 3003);
+    
     print("Connected in " +
         (DateTime.now().millisecondsSinceEpoch - initTime).toString());
     print(socket != null ? "Socket connected" : "Error on settingup socket");
@@ -97,18 +102,22 @@ class SocketController {
         }
         else if (String.fromCharCodes(data) == "mensagem enviada pelo clienteClose Server")
         {
-          socket.write("  Sai fora");
-          await server.close();
-          await socket.destroy();
-          print("asdk");
-          
+          await closeAllConnections();
         }
         else{
-          _recorder.audioStream.listen((data)
-          {
-            if (_isPlaying) {
-              socket.write("a");
-            }
+         _recorder.audioStream.listen((data)
+         {
+           if(isServerClosed)
+           {
+             socket.write("Sai fora");
+           }
+           else
+           {
+              if (_isPlaying)
+              {
+                socket.add(data);
+              }
+           }
          });
         }
       },
@@ -138,9 +147,9 @@ class SocketController {
           else if(String.fromCharCodes(data).contains("fora")){
               socket.destroy();
           }
-          else{//
-          print(String.fromCharCodes(data));
-          //_player.audioStream.add(data);
+          else
+          {
+            _player.audioStream.add(data);
           }
         
       },
@@ -154,11 +163,19 @@ class SocketController {
         socket.close();
         socket.destroy();
       }
+      
     );
   }
 
-  static closeConnections()
+  static void closeAllConnections() async
   {
-    server.close();
+    isServerClosed = true;
+    await server.close();
+    await socket.destroy();
+  }
+  
+  static void closeClientSocket()
+  {
+    socket.destroy();
   }
 }

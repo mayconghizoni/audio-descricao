@@ -50,7 +50,7 @@ class _TransmitionState extends State<Transmition> {
               child: RaisedButton(
                 color: Colors.deepOrangeAccent,
                 padding: const EdgeInsets.all(25.0),
-                onPressed: () => {},
+                onPressed: () => closeSocket(),
                 child: Text(
                   "Finalizar Transmissão",
                   style: TextStyle(

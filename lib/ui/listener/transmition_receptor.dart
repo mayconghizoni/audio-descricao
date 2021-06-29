@@ -1,3 +1,4 @@
+import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
 class TransmitionReceptor extends StatefulWidget {
@@ -45,7 +46,7 @@ class _TransmitionReceptor extends State<TransmitionReceptor> {
               child: RaisedButton(
                 color: Colors.deepOrangeAccent,
                 padding: const EdgeInsets.all(25.0),
-                onPressed: () => {},
+                onPressed: () => SocketController.closeClientSocket(),
                 child: Text(
                   "Sair",
                   style: TextStyle(
