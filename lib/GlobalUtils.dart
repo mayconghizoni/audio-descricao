@@ -1,3 +1,5 @@
+import 'package:acessibility_project/socket_service/WifiController.dart';
+
 class GlobalUtils
 {
 
@@ -17,5 +19,7 @@ class GlobalUtils
   static void setRoomName(String room){roomName = room;}
 
   static String getRoomName(){return roomName;}
+
+  static Future<String> getMyIp() async{return await WifiController().getIp();}
 
 }

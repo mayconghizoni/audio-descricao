@@ -1,3 +1,5 @@
+import 'package:acessibility_project/GlobalUtils.dart';
+import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
 
 class Transmition extends StatefulWidget {
@@ -48,7 +50,7 @@ class _TransmitionState extends State<Transmition> {
               child: RaisedButton(
                 color: Colors.deepOrangeAccent,
                 padding: const EdgeInsets.all(25.0),
-                onPressed: () => {},
+                onPressed: () => closeSocket(),
                 child: Text(
                   "Finalizar Transmissão",
                   style: TextStyle(
@@ -74,4 +76,11 @@ class _TransmitionState extends State<Transmition> {
       ),
     );
   }
+
+  closeSocket() async
+  {
+    SocketController socketController = new SocketController();
+    (await socketController.connectToSocket(await GlobalUtils.getMyIp())).write("Close Server");
+  }
+
 }
