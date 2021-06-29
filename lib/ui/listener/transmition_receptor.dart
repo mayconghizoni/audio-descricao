@@ -28,15 +28,8 @@ class _TransmitionReceptor extends State<TransmitionReceptor> {
               children: <Widget>[
                 IconButton(
                   iconSize: 96.0,
-                  icon: Icon(_isRecording ? Icons.mic : Icons.mic_off),
+                  icon: Icon(_isPlaying ? Icons.headset : Icons.headset_off),
                   onPressed: () => {},
-                  // onPressed: _isRecording ? _recorder.stop : _recorder.start,
-                ),
-                IconButton(
-                  iconSize: 96.0,
-                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                  onPressed: () => {},
-                  //onPressed: _isPlaying ? _player.stop : _play,
                 ),
               ],
             ),

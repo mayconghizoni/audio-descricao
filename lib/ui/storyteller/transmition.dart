@@ -38,7 +38,7 @@ class _TransmitionState extends State<Transmition> {
                 ),
                 IconButton(
                   iconSize: 96.0,
-                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                  icon: Icon(_isPlaying ? Icons.headset : Icons.headset_off),
                   onPressed: () => {},
                   //onPressed: _isPlaying ? _player.stop : _play,
                 ),
