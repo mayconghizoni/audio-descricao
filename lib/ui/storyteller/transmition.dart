@@ -1,6 +1,7 @@
 import 'package:acessibility_project/GlobalUtils.dart';
 import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 class Transmition extends StatefulWidget {
   @override
@@ -77,10 +78,10 @@ class _TransmitionState extends State<Transmition> {
     );
   }
 
-  closeSocket() async
-  {
+  closeSocket() async {
     SocketController socketController = new SocketController();
-    (await socketController.connectToSocket(await GlobalUtils.getMyIp())).write("Close Server");
+    (await socketController.connectToSocket(await GlobalUtils.getMyIp()))
+        .write("Close Server");
+    Phoenix.rebirth(context);
   }
-
 }

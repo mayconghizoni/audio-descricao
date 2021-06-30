@@ -39,7 +39,7 @@ class _TransmitionReceptor extends State<TransmitionReceptor> {
               child: RaisedButton(
                 color: Colors.deepOrangeAccent,
                 padding: const EdgeInsets.all(25.0),
-                onPressed: () => SocketController.closeClientSocket(),
+                onPressed: () => SocketController.closeClientSocket(context),
                 child: Text(
                   "Sair",
                   style: TextStyle(
