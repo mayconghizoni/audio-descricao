@@ -6,9 +6,9 @@ import 'package:acessibility_project/GlobalUtils.dart';
 import 'package:acessibility_project/socket_service/WifiController.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sound_stream/sound_stream.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 
-class SocketController 
-{
+class SocketController {
   static RecorderStream _recorder = RecorderStream();
   static PlayerStream _player = PlayerStream();
   static WifiController wifiController = new WifiController();
@@ -26,15 +26,13 @@ class SocketController
     });
   }
 
-  Future<List> listConnecions() async 
-  {
+  Future<List> listConnecions() async {
     List objects = new List();
     List<String> ips = new List<String>();
     String ip = await wifiController.getIp();
     ip = ip.substring(0, ip.lastIndexOf(".") + 1);
 
-    for (int i = 50; i < 120; i++) 
-    {
+    for (int i = 50; i < 120; i++) {
       String tempIP = ip + i.toString();
       try {
         final socket = await Socket.connect(tempIP, 3003,
@@ -55,28 +53,21 @@ class SocketController
   }
 
   listenRoomsNames(Socket socket) async {
-
-    socket.listen(
-      (Uint8List data) {
-        SocketController.roomsNames.add(String.fromCharCodes(data));
-      },
-      onError: (error)
-      {
-        socket.close();
-        socket.destroy();
-      },
-      onDone: ()
-      {
-        socket.close();
-        socket.destroy();
-      }
-    );
+    socket.listen((Uint8List data) {
+      SocketController.roomsNames.add(String.fromCharCodes(data));
+    }, onError: (error) {
+      socket.close();
+      socket.destroy();
+    }, onDone: () {
+      socket.close();
+      socket.destroy();
+    });
   }
 
   Future<Socket> connectToSocket(String ip) async {
     var initTime = DateTime.now().millisecondsSinceEpoch;
     socket = await Socket.connect(ip, 3003);
-    
+
     print("Connected in " +
         (DateTime.now().millisecondsSinceEpoch - initTime).toString());
     print(socket != null ? "Socket connected" : "Error on settingup socket");
@@ -85,8 +76,7 @@ class SocketController
     return socket;
   }
 
-  handleConnection(Socket socket) 
-  {
+  handleConnection(Socket socket) {
     _recorder.initialize();
     _recorder.start();
 
@@ -96,33 +86,24 @@ class SocketController
 
     socket.listen(
       (Uint8List data) async {
-        if(String.fromCharCodes(data) == "Testing connection")
-        {
+        if (String.fromCharCodes(data) == "Testing connection") {
           socket.write(GlobalUtils.getRoomName());
-        }
-        else if (String.fromCharCodes(data) == "mensagem enviada pelo clienteClose Server")
-        {
+        } else if (String.fromCharCodes(data) ==
+            "mensagem enviada pelo clienteClose Server") {
           await closeAllConnections();
-        }
-        else{
-         _recorder.audioStream.listen((data)
-         {
-           if(isServerClosed)
-           {
-             socket.write("Sai fora");
-           }
-           else
-           {
-              if (_isPlaying)
-              {
+        } else {
+          _recorder.audioStream.listen((data) {
+            if (isServerClosed) {
+              socket.write("Sai fora");
+            } else {
+              if (_isPlaying) {
                 socket.add(data);
               }
-           }
-         });
+            }
+          });
         }
       },
-      onError: (error) 
-      {
+      onError: (error) {
         print(error);
         socket.close();
         socket.destroy();
@@ -139,43 +120,31 @@ class SocketController
     _player.initialize();
     _player.start();
 
-    socket.listen(
-        (Uint8List data) {
-          if(String.fromCharCodes(data).contains("teste")){
-            GlobalUtils.setRoomName(String.fromCharCodes(data));
-          }
-          else if(String.fromCharCodes(data).contains("fora")){
-              socket.destroy();
-          }
-          else
-          {
-            _player.audioStream.add(data);
-          }
-        
-      },
-      onError: (error)
-      {
-        socket.close();
+    socket.listen((Uint8List data) {
+      if (String.fromCharCodes(data).contains("teste")) {
+        GlobalUtils.setRoomName(String.fromCharCodes(data));
+      } else if (String.fromCharCodes(data).contains("fora")) {
         socket.destroy();
-      },
-      onDone: ()
-      {
-        socket.close();
-        socket.destroy();
+      } else {
+        _player.audioStream.add(data);
       }
-      
-    );
+    }, onError: (error) {
+      socket.close();
+      socket.destroy();
+    }, onDone: () {
+      socket.close();
+      socket.destroy();
+    });
   }
 
-  static void closeAllConnections() async
-  {
+  static void closeAllConnections() async {
     isServerClosed = true;
     await server.close();
     await socket.destroy();
   }
-  
-  static void closeClientSocket()
-  {
+
+  static void closeClientSocket(context) {
     socket.destroy();
+    Phoenix.rebirth(context);
   }
 }
