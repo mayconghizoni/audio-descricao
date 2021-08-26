@@ -1,5 +1,6 @@
 import 'package:acessibility_project/socket_service/Socket.dart';
 import 'package:acessibility_project/ui/listener/home_receptor.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:acessibility_project/ui/storyteller/home.dart';
 
@@ -27,16 +28,43 @@ class _DecisionState extends State<Decision> {
     });
   }
 
+  enableButton() {
+    setState(() {
+      isEnabled = true;
+    });
+  }
+
   showHomeListener() async {
     showSnackBar();
     SocketController socketController = new SocketController();
     List objects = await socketController.listConnecions();
+    List validation = objects[0];
 
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => new HomeReceptor(objects),
-        ));
+    if (validation.isNotEmpty) {
+      _scaffoldKey.currentState.hideCurrentSnackBar();
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => new HomeReceptor(objects),
+          ));
+    } else {
+      nullListlert();
+      enableButton();
+    }
+  }
+
+  nullListlert() {
+    _scaffoldKey.currentState.hideCurrentSnackBar();
+    showDialog(
+        context: context,
+        builder: (_) => CupertinoAlertDialog(
+              title: Text("Ops! Nenhuma sala encontrada"),
+              content: Card(
+                color: Colors.transparent,
+                elevation: 0.0,
+              ),
+            ),
+        barrierDismissible: true);
   }
 
   showSnackBar() async {
