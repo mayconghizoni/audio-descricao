@@ -10,6 +10,7 @@ class Decision extends StatefulWidget {
 
 class _DecisionState extends State<Decision> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool isEnabled = true;
 
   showHomeStoryteller() {
     Navigator.push(
@@ -19,13 +20,18 @@ class _DecisionState extends State<Decision> {
         ));
   }
 
-  showHomeListener() async 
-  {
+  disableButton() {
+    setState(() {
+      isEnabled = false;
+      showHomeListener();
+    });
+  }
 
+  showHomeListener() async {
     showSnackBar();
     SocketController socketController = new SocketController();
     List objects = await socketController.listConnecions();
-    
+
     Navigator.push(
         context,
         MaterialPageRoute(
@@ -34,16 +40,19 @@ class _DecisionState extends State<Decision> {
   }
 
   showSnackBar() async {
-
-    final snackBar = SnackBar(content: Row(
-      children: [
-        Icon(Icons.search),
-        SizedBox(width: 20,),
-        Expanded(child: Text("Procurando salas...")),
-      ],
-    ),
-    duration: Duration(seconds: 90),);
-        // ignore: deprecated_member_use
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Icon(Icons.search),
+          SizedBox(
+            width: 20,
+          ),
+          Expanded(child: Text("Procurando salas...")),
+        ],
+      ),
+      duration: Duration(seconds: 90),
+    );
+    // ignore: deprecated_member_use
     _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
@@ -66,7 +75,7 @@ class _DecisionState extends State<Decision> {
               padding: const EdgeInsets.all(40.0),
               // ignore: deprecated_member_use
               child: RaisedButton(
-                onPressed: showHomeListener,
+                onPressed: isEnabled ? () => disableButton() : null,
                 color: Colors.deepOrangeAccent,
                 padding: const EdgeInsets.all(25.0),
                 child: Text(
