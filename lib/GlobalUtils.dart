@@ -20,6 +20,6 @@ class GlobalUtils
 
   static String getRoomName(){return roomName;}
 
-  static Future<String> getMyIp() async{return await WifiController().getIp();}
+  static Future<String?> getMyIp() async{return await WifiController().getIp();}
 
 }

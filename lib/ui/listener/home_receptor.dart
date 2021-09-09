@@ -54,7 +54,7 @@ class _HomeReceptorState extends State<HomeReceptor> {
   connectToSocket(String ip) async{
     showSnackBar();
     SocketController sc = new SocketController();
-    Socket socket = await sc.connectToSocket(ip);
+    Socket? socket = await sc.connectToSocket(ip);
     sc.listenConnection(socket);
 
         Navigator.push(
@@ -75,7 +75,7 @@ class _HomeReceptorState extends State<HomeReceptor> {
     ),
     duration: Duration(seconds: 20),);
         // ignore: deprecated_member_use
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState?.showSnackBar(snackBar);
   }
 
 }
