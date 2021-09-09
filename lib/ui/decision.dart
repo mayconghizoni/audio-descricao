@@ -41,7 +41,7 @@ class _DecisionState extends State<Decision> {
     List validation = objects[0];
 
     if (validation.isNotEmpty) {
-      _scaffoldKey.currentState.hideCurrentSnackBar();
+      _scaffoldKey.currentState!.hideCurrentSnackBar();
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -54,7 +54,7 @@ class _DecisionState extends State<Decision> {
   }
 
   nullListlert() {
-    _scaffoldKey.currentState.hideCurrentSnackBar();
+    _scaffoldKey.currentState!.hideCurrentSnackBar();
     showDialog(
         context: context,
         builder: (_) => CupertinoAlertDialog(
@@ -81,7 +81,7 @@ class _DecisionState extends State<Decision> {
       duration: Duration(seconds: 90),
     );
     // ignore: deprecated_member_use
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState!.showSnackBar(snackBar);
   }
 
   @override
