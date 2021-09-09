@@ -44,7 +44,7 @@ class _DecisionState extends State<Decision> {
     ),
     duration: Duration(seconds: 90),);
         // ignore: deprecated_member_use
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState?.showSnackBar(snackBar);
   }
 
   @override

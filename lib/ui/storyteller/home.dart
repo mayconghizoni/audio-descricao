@@ -17,11 +17,11 @@ class _HomeState extends State<Home> {
   final TextEditingController _salaController = new TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _autoValidate = false;
-  String _name = "";
+  String? _name = "";
 
   validateInputNameCall() {
-    if (_formKey.currentState.validate()) {
-      _formKey.currentState.save();
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
       initTransmition();
     } else {
       setState(() {
@@ -46,13 +46,13 @@ class _HomeState extends State<Home> {
                       hintText: "Teatro da Liga",
                     ),
                     keyboardType: TextInputType.text,
-                    validator: (String arg) {
-                      if (arg.length < 3)
+                    validator: (String? arg) {
+                      if (arg!.length < 3)
                         return 'Digite o nome da sala';
                       else
                         return null;
                     },
-                    onSaved: (String val) {
+                    onSaved: (String? val) {
                       _name = val;
                     },
                   ),
@@ -80,7 +80,7 @@ class _HomeState extends State<Home> {
     final snackBar = SnackBar(
         content: Text("Iniciando transmissão de " + _salaController.text));
     // ignore: deprecated_member_use
-    _scaffoldKey.currentState.showSnackBar(snackBar);
+    _scaffoldKey.currentState?.showSnackBar(snackBar);
   }
 
   cancel() {
@@ -92,8 +92,8 @@ class _HomeState extends State<Home> {
     GlobalUtils.setRoomName(roomName);
     SocketController socketController = new SocketController();
     await socketController.createScocket();
-    //Socket socket = await socketController.connectToSocket();
-    //socketController.listenConnection(socket);
+    Socket? socket = await socketController.connectToSocket(await GlobalUtils.getMyIp());
+    socketController.listenConnection(socket);
     Navigator.push(
         context,
         MaterialPageRoute(
