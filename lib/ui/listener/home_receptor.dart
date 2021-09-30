@@ -36,13 +36,13 @@ class _HomeReceptorState extends State<HomeReceptor> {
       itemCount: rooms.length,
       itemBuilder: (context, index) {
         var listTile = ListTile(
-            title: Text(
-              '${rooms[index]}',
-              style: TextStyle(fontSize: 25.0),
-            ),
-            leading: Icon(Icons.meeting_room),
-            onTap: () => connectToSocket('${ips[index]}'),
-          );
+          title: Text(
+            '${rooms[index]}',
+            style: TextStyle(fontSize: 25.0),
+          ),
+          leading: Icon(Icons.meeting_room),
+          onTap: () => connectToSocket('${ips[index]}'),
+        );
         return Padding(
           padding: const EdgeInsets.all(15.0),
           child: listTile,
@@ -51,31 +51,34 @@ class _HomeReceptorState extends State<HomeReceptor> {
     );
   }
 
-  connectToSocket(String ip) async{
+  connectToSocket(String ip) async {
     showSnackBar();
     SocketController sc = new SocketController();
     Socket? socket = await sc.connectToSocket(ip);
     sc.listenConnection(socket);
 
-        Navigator.push(
+    Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => new TransmitionReceptor(),
         ));
+    sc.setReceptorContext(context);
   }
 
-    showSnackBar() async {
-
-    final snackBar = SnackBar(content: Row(
-      children: [
-        Icon(Icons.add),
-        SizedBox(width: 10,),
-        Expanded(child: Text("Conectando à salas...")),
-      ],
-    ),
-    duration: Duration(seconds: 20),);
-        // ignore: deprecated_member_use
+  showSnackBar() async {
+    final snackBar = SnackBar(
+      content: Row(
+        children: [
+          Icon(Icons.add),
+          SizedBox(
+            width: 10,
+          ),
+          Expanded(child: Text("Conectando à salas...")),
+        ],
+      ),
+      duration: Duration(seconds: 20),
+    );
+    // ignore: deprecated_member_use
     _scaffoldKey.currentState?.showSnackBar(snackBar);
   }
-
 }
