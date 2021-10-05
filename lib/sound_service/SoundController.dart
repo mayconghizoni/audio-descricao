@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_sound/public/flutter_sound_player.dart';
@@ -93,6 +94,30 @@ class SoundController
       await _recorder!.openAudioSession();
 
       await _player!.openAudioSession();
+  }
+
+  static Future<Uint8List> getAudioStream() async
+  {
+     var recordingDataController = StreamController<Food>();
+     Uint8List audioData = Uint8List(0);
+      recordingDataController.stream.listen((buffer) async
+      {
+      if (buffer is FoodData)
+      {
+        audioData = buffer.data!;
+      }
+      });
+
+      await _recorder!.startRecorder(
+          toStream: recordingDataController.sink,
+          codec: Codec.pcm16,
+          numChannels: 1,
+          sampleRate: tSampleRate,
+      );
+
+      return audioData;
+
+      
   }
 
 }
