@@ -29,7 +29,7 @@ class SocketController {
 
   static bool recorderStarted = false;
   static bool playerStarted = false;
-  var receptorContext;
+  var receptorContext;  
 
   Future<void> enableRecorder() async {
     _recorder = await soundController.getSoundRecorder();
@@ -50,11 +50,14 @@ class SocketController {
     });
   }
 
-  Future<List> listConnecions() async {
-    List<List> objects = new List.empty(growable: true);
-    List<String> ips = new List.empty(growable: true);
+
+  Future<List> listConnecions() async 
+  {
+    List<List>? objects = new List.empty(growable: true);
+    List<String> ips = new List.empty();
     String? ip = await wifiController.getIp();
     ip = ip?.substring(0, ip.lastIndexOf(".") + 1);
+    
 
     for (int i = 50; i < 120; i++) {
       String tempIP = ip! + i.toString();
@@ -102,6 +105,7 @@ class SocketController {
     return socket;
   }
 
+
   setReceptorContext(BuildContext context) {
     receptorContext = context;
   }
@@ -111,28 +115,37 @@ class SocketController {
       (Uint8List data) async {
         if (String.fromCharCodes(data) == "Testing connection") {
           socket.write(GlobalUtils.getRoomName());
-        } else if (String.fromCharCodes(data) ==
-            "mensagem enviada pelo clienteClose Server") {
+        } 
+        else if (String.fromCharCodes(data) == 
+                  "Close Server") 
+        {
           await closeAllConnections();
-        } else {
-          recordingDataController.stream.listen((buffer) {
-            if (buffer is FoodData) {
-              if (isServerClosed) {
-                //Debugar esta parte
-                socket.write(" Server is closed ");
-              } else {
-                socket.add(buffer.data!);
-              }
-            }
-          });
-          if (_recorder!.isStopped) {
-            await _recorder!.startRecorder(
-              toStream: recordingDataController.sink,
-              codec: Codec.pcm16,
-              numChannels: 1,
-              sampleRate: tSampleRate,
-            );
+        } 
+        else 
+        {
+          recordingDataController.stream.listen((event) {
+          if(isServerClosed)
+          {
+            socket.write(" Server is closed ");
+            stopAudioSession();
           }
+          else
+          {    
+            if (event is FoodData)
+            {
+              socket.add(event.data!);
+            }
+          }
+        });
+        if(_recorder!.isStopped)
+        {
+          await _recorder!.startRecorder(
+            toStream: recordingDataController.sink,
+            codec: Codec.pcm16,
+            numChannels: 1,
+            sampleRate: tSampleRate,
+            );
+          }          
         }
       },
       onError: (error) {
@@ -152,7 +165,9 @@ class SocketController {
     socket!.listen((Uint8List data) async {
       if (String.fromCharCodes(data).contains("teste")) {
         GlobalUtils.setRoomName(String.fromCharCodes(data));
-      } else if (String.fromCharCodes(data).contains("Server is closed")) {
+      } 
+      else if (String.fromCharCodes(data).contains("Server is closed")) 
+      {
         _player!.stopPlayer();
         socket.destroy();
         Phoenix.rebirth(receptorContext);
@@ -175,6 +190,18 @@ class SocketController {
     isServerClosed = true;
     await server!.close();
     socket!.destroy();
+  }
+
+  Future<void> stopAudioSession() async
+  {
+    if(!(_recorder!.isStopped))
+    {
+      _recorder!.stopRecorder();
+    }
+    if(!(_player!.isStopped))
+    {
+      _player!.stopPlayer();
+    }
   }
 
   static void closeClientSocket(context) {
