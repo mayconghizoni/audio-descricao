@@ -80,8 +80,7 @@ class _TransmitionState extends State<Transmition> {
 
   closeSocket() async {
     SocketController socketController = new SocketController();
-    (await socketController.connectToSocket(await GlobalUtils.getMyIp()))!
-        .write("Close Server");
+    (await socketController.connectToSocket(await GlobalUtils.getMyIp()))?.write("Close Server");
     Phoenix.rebirth(context);
   }
 }
