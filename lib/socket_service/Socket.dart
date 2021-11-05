@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:sound_stream/sound_stream.dart';
+import 'package:synchronized/extension.dart';
 
 const int tSampleRate = 16000;
 
@@ -102,7 +103,9 @@ class SocketController
     receptorContext = context;
   }
 
-  handleConnection(Socket socket) {
+  handleConnection(Socket socket) 
+  {
+    
     bool socketOpen = true;
     socket.listen(
       (Uint8List data) {
@@ -162,7 +165,7 @@ class SocketController
         if (!playerStarted) {
           await startPlayer();
         }
-        await _player!.feedFromStream(data);
+        synchronized(() => _player!.feedFromStream(data));
       }
     }, onError: (error) {
       socket.close();
@@ -198,5 +201,12 @@ class SocketController
     await _player!.startPlayerFromStream(
         codec: Codec.pcm16, numChannels: 1, sampleRate: tSampleRate);
     playerStarted = true;
+  }
+
+  Future<void> startRecorder() async
+  {
+    _recorder.initialize();
+    _recorder.start();
+    recorderStarted = true;
   }
 }
