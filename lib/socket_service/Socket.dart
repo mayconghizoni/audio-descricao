@@ -105,6 +105,10 @@ class SocketController
 
   handleConnection(Socket socket) 
   {
+    if(!recorderStarted)
+    {
+      startRecorder();
+    }
     
     bool socketOpen = true;
     socket.listen(
