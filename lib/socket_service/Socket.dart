@@ -38,6 +38,7 @@ class SocketController
   Future<void> createScocket() async {
     String? ip = await wifiController.getIp();
     server = await ServerSocket.bind(ip, 3003);
+    isServerClosed = false;
 
     server?.listen((client) {
       handleConnection(client);
@@ -105,6 +106,8 @@ class SocketController
 
   handleConnection(Socket socket) 
   {
+
+    StreamSubscription? _audioStream;
     if(!recorderStarted)
     {
       startRecorder();
@@ -123,16 +126,26 @@ class SocketController
         }
         else if(String.fromCharCodes(data) == "Client left")
         {
+          closeClientSocket(receptorContext);
+          socketOpen = false;
           socket.done;
         }
         else 
         {
-          _recorder.audioStream.listen((data) 
+          _audioStream = _recorder.audioStream.listen((data)
           {
             if(isServerClosed)
             {
-             socket.write(" Server is closed ");
-              stopAudioSession();
+              socket.write("Server is closed");
+              socket.close();
+              socket.destroy();
+              _audioStream?.cancel();
+            }
+            else if(!socketOpen)
+            {
+              socket.close();
+              socket.destroy();
+              _audioStream?.cancel();
             }
             else
             {    
@@ -163,6 +176,7 @@ class SocketController
       else if (String.fromCharCodes(data).contains("Server is closed")) 
       {
         _player!.stopPlayer();
+        playerStarted = false;
         socket.destroy();
         Phoenix.rebirth(receptorContext);
       } else {
@@ -182,7 +196,8 @@ class SocketController
 
   static Future<void> closeAllConnections() async {
     isServerClosed = true;
-    await server!.close();
+    server!.close();
+    socket!.close();
     socket!.destroy();
   }
 
