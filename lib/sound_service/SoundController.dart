@@ -23,10 +23,9 @@ class SoundController
 
   Future<FlutterSoundPlayer?> getSoundPlayer() async
   {
-    if(!isSoundInitilized)
-    {
-      _player = await enableAudioContext();
-    }
+    
+    _player = await enableAudioContext();
+    
     return _player;
   }
 
@@ -41,7 +40,6 @@ class SoundController
 
   static Future<FlutterSoundPlayer?> enableAudioContext() async
   {
-    isSoundInitilized = true;
     return await _player!.openAudioSession();
   }
 

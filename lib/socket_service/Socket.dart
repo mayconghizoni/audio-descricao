@@ -8,10 +8,13 @@ import 'package:acessibility_project/sound_service/SoundController.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:sound_stream/sound_stream.dart';
+import 'package:synchronized/extension.dart';
 
 const int tSampleRate = 16000;
 
-class SocketController {
+class SocketController 
+{
   SoundController soundController = SoundController();
   static WifiController wifiController = new WifiController();
 
@@ -21,29 +24,27 @@ class SocketController {
   static List<String> roomsNames = new List.empty(growable: true);
   static bool isServerClosed = false;
 
-  // StreamSubscription? _mRecordingDataSubscription;
   static FlutterSoundPlayer? _player = FlutterSoundPlayer();
-  FlutterSoundRecorder? _recorder = FlutterSoundRecorder();
-
-  var recordingDataController = StreamController<Food>.broadcast();
+  RecorderStream _recorder = RecorderStream();
 
   static bool recorderStarted = false;
   static bool playerStarted = false;
   var receptorContext;  
 
-  Future<void> enableRecorder() async {
-    _recorder = await soundController.getSoundRecorder();
+  void setReceptorContext(BuildContext context) 
+  {
+    receptorContext = context;
   }
 
-  Future<void> enablePlayer() async {
-    _player = await soundController.getSoundPlayer();
-  }
+//----------------------------CONTROLE DE SOCKET---------------------------
 
-  Future<void> createScocket() async {
+  Future<void> createScocket() async 
+  {
     String? ip = await wifiController.getIp();
     server = await ServerSocket.bind(ip, 3003);
 
-    await enableRecorder();
+    isServerClosed = false;
+    await createAudioContext(false);
 
     server?.listen((client) {
       handleConnection(client);
@@ -51,10 +52,11 @@ class SocketController {
   }
 
 
+//REFATORAR
   Future<List> listConnecions() async 
   {
     List<List>? objects = new List.empty(growable: true);
-    List<String> ips = new List.empty();
+    List<String> ips = new List.empty(growable: true);
     String? ip = await wifiController.getIp();
     ip = ip?.substring(0, ip.lastIndexOf(".") + 1);
     
@@ -79,81 +81,91 @@ class SocketController {
     return objects;
   }
 
-  listenRoomsNames(Socket socket) async {
-    socket.listen((Uint8List data) {
+  listenRoomsNames(Socket socket) async 
+  {
+    socket.listen((Uint8List data) 
+    {
       SocketController.roomsNames.add(String.fromCharCodes(data));
-    }, onError: (error) {
+    }, onError: (error) 
+    {
       socket.close();
       socket.destroy();
-    }, onDone: () {
+    }, onDone: () 
+    {
       socket.close();
       socket.destroy();
     });
   }
 
-  Future<Socket?> connectToSocket(String? ip) async {
-    var initTime = DateTime.now().millisecondsSinceEpoch;
-    socket = await Socket.connect(ip, 3003);
 
+
+  Future<Socket?> connectToSocket(String? ip) async 
+  {
+    //var initTime = DateTime.now().millisecondsSinceEpoch;
+    socket = await Socket.connect(ip, 3003);
+    /*
     print("Connected in " +
         (DateTime.now().millisecondsSinceEpoch - initTime).toString());
     print(socket != null ? "Socket connected" : "Error on settingup socket");
     socket?.write("mensagem enviada pelo cliente");
-
-    await enablePlayer();
-
+    */
     return socket;
   }
 
-
-  setReceptorContext(BuildContext context) {
-    receptorContext = context;
-  }
-
-  handleConnection(Socket socket) {
+  void handleConnection(Socket socket)
+  {
+    StreamSubscription? _audioStream; 
+    bool socketOpen = true;
     socket.listen(
-      (Uint8List data) async {
-        if (String.fromCharCodes(data) == "Testing connection") {
-          socket.write(GlobalUtils.getRoomName());
-        } 
-        else if (String.fromCharCodes(data) == 
-                  "Close Server") 
+      (Uint8List data) 
+      {
+        String strData = String.fromCharCodes(data);
+        switch (strData)
         {
-          await closeAllConnections();
-        } 
-        else 
-        {
-          recordingDataController.stream.listen((event) {
-          if(isServerClosed)
-          {
-            socket.write(" Server is closed ");
-            stopAudioSession();
+            case "Testing connection":
+              socket.write(GlobalUtils.getRoomName());
+              break;
+            case "Close Server":
+              closeAllConnections();
+              break;
+            case "Client left":
+              closeClientSocket(socket, receptorContext);
+              socketOpen = false;
+              socket.done;
+              break;
+            default:
+              _audioStream = _recorder.audioStream.listen((data)
+              {
+                if(isServerClosed)
+                {
+                  print("Server is closed!");
+                  socket.write("Server is closed");
+                  socket.close();
+                  socket.destroy();
+                  _audioStream?.cancel();
+                }
+                else if(!socketOpen)
+                {
+                  socket.close();
+                  socket.destroy();
+                  _audioStream?.cancel();
+                }
+                else
+                {
+                  _player?.feedFromStream(data);    
+                  socket.add(data);
+                }
+              });  
+              break;
           }
-          else
-          {    
-            if (event is FoodData)
-            {
-              socket.add(event.data!);
-            }
-          }
-        });
-        if(_recorder!.isStopped)
-        {
-          await _recorder!.startRecorder(
-            toStream: recordingDataController.sink,
-            codec: Codec.pcm16,
-            numChannels: 1,
-            sampleRate: tSampleRate,
-            );
-          }          
-        }
       },
       onError: (error) {
         print(error);
         socket.close();
         socket.destroy();
       },
-      onDone: () async {
+      onDone: () {
+        socketOpen = false;
         print("Client left");
         socket.close();
         socket.destroy();
@@ -161,21 +173,27 @@ class SocketController {
     );
   }
 
-  listenConnection(Socket? socket) async {
-    socket!.listen((Uint8List data) async {
-      if (String.fromCharCodes(data).contains("teste")) {
-        GlobalUtils.setRoomName(String.fromCharCodes(data));
-      } 
-      else if (String.fromCharCodes(data).contains("Server is closed")) 
+  void listenConnection(Socket? socket) 
+  {
+    socket!.listen((Uint8List data) async
+     {
+      String strData = String.fromCharCodes(data);
+      switch(strData)
       {
-        _player!.stopPlayer();
-        socket.destroy();
-        Phoenix.rebirth(receptorContext);
-      } else {
-        if (!playerStarted) {
-          await startPlayer();
-        }
-        await _player!.feedFromStream(data);
+        /*
+        case "teste":
+          GlobalUtils.setRoomName(String.fromCharCodes(data));
+          break;
+        */
+        case "Server is closed":
+          closeClientSocket(socket, receptorContext);
+          break;
+        default:
+          if (!playerStarted) {
+            await createAudioContext(true);
+          }
+          synchronized(() => _player!.feedFromStream(data));
+          break;
       }
     }, onError: (error) {
       socket.close();
@@ -186,29 +204,38 @@ class SocketController {
     });
   }
 
-  static Future<void> closeAllConnections() async {
-    isServerClosed = true;
-    await server!.close();
-    socket!.destroy();
-  }
-
-  Future<void> stopAudioSession() async
+  static Future<void> closeAllConnections() async 
   {
-    if(!(_recorder!.isStopped))
-    {
-      _recorder!.stopRecorder();
-    }
-    if(!(_player!.isStopped))
-    {
-      _player!.stopPlayer();
-    }
-  }
-
-  static void closeClientSocket(context) {
-    _player!.stopPlayer();
+    isServerClosed = true;
     socket!.close();
     socket!.destroy();
-    Phoenix.rebirth(context);
+    server!.close();
+  }
+  
+  void closeClientSocket(Socket socket, context) 
+  {
+    stopAudioSession();
+    socket.close();
+    socket.destroy();
+    if(context != null)
+    {
+      Phoenix.rebirth(context);
+    } 
+  }
+
+  //---------------------------CONTROLE DE ÁUDIO-----------------------
+
+  Future<void> createAudioContext(bool onlyAudio) async 
+  {
+    if(!playerStarted)
+    {
+      await enablePlayer();
+      await startPlayer();
+    }
+    if(!recorderStarted && !onlyAudio)
+    {
+      await startRecorder();
+    }
   }
 
   Future<void> startPlayer() async {
@@ -217,14 +244,23 @@ class SocketController {
     playerStarted = true;
   }
 
-  Future<void> startRecorder() async {
-    await _recorder!.startRecorder(
-      toStream: recordingDataController.sink,
-      codec: Codec.pcm16,
-      numChannels: 1,
-      sampleRate: tSampleRate,
-    );
-
+  Future<void> startRecorder() async
+  {
+    _recorder.initialize();
+    _recorder.start();
     recorderStarted = true;
+  }
+
+   Future<void> stopAudioSession() async
+   {
+    if(!(_player!.isStopped))
+    {
+      _player!.stopPlayer();
+    }
+    playerStarted = false;
+  }
+
+  Future<void> enablePlayer() async {
+    _player = await soundController.getSoundPlayer();
   }
 }
