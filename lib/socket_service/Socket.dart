@@ -129,7 +129,7 @@ class SocketController
               closeAllConnections();
               break;
             case "Client left":
-              closeClientSocket(socket, receptorContext);
+              closeSocketInstance(receptorContext, socket);
               socketOpen = false;
               socket.done;
               break;
@@ -186,7 +186,7 @@ class SocketController
           break;
         */
         case "Server is closed":
-          closeClientSocket(socket, receptorContext);
+          closeSocketInstance(receptorContext, socket);
           break;
         default:
           if (!playerStarted) {
@@ -211,12 +211,20 @@ class SocketController
     socket!.destroy();
     server!.close();
   }
+
+  static void closeClientSocket(context) 
+  {
+    _player!.stopPlayer();
+    socket!.close();
+    socket!.destroy();
+    Phoenix.rebirth(context);
+  }
   
-  void closeClientSocket(Socket socket, context) 
+  void closeSocketInstance(context, Socket? socket) 
   {
     stopAudioSession();
-    socket.close();
-    socket.destroy();
+    socket?.close();
+    socket?.destroy();
     if(context != null)
     {
       Phoenix.rebirth(context);
