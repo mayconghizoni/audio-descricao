@@ -81,8 +81,9 @@ class _TransmitionState extends State<Transmition> {
   closeSocket() async {
     SocketController socketController = new SocketController();
     print("Fechando o servidor");
+    GlobalUtils utils = new GlobalUtils();
     //Retorna o objeto Socket e escreve uma mensagem nesse socket.
-    (await socketController.connectToSocket(await GlobalUtils.getMyIp()))!.write("Close Server");
+    (await socketController.connectToSocket(await utils.getMyIp()))!.write("Close Server");
     Phoenix.rebirth(context);
   }
 }
