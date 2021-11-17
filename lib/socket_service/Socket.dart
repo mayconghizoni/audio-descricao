@@ -13,8 +13,7 @@ import 'package:synchronized/extension.dart';
 
 const int tSampleRate = 16000;
 
-class SocketController 
-{
+class SocketController {
   SoundController soundController = SoundController();
   static WifiController wifiController = new WifiController();
 
@@ -29,7 +28,7 @@ class SocketController
 
   static bool recorderStarted = false;
   static bool playerStarted = false;
-  var receptorContext;  
+  var receptorContext;
 
   void setReceptorContext(BuildContext context) 
   {
@@ -51,15 +50,13 @@ class SocketController
     });
   }
 
-
 //REFATORAR
-  Future<List> listConnecions() async 
-  {
+  Future<List> listConnecions() async {
+    SocketController.roomsNames.clear();
     List<List>? objects = new List.empty(growable: true);
     List<String> ips = new List.empty(growable: true);
     String? ip = await wifiController.getIp();
     ip = ip?.substring(0, ip.lastIndexOf(".") + 1);
-    
 
     for (int i = 50; i < 120; i++) {
       String tempIP = ip! + i.toString();
@@ -211,6 +208,7 @@ class SocketController
     socket!.destroy();
     server!.close();
   }
+
   
   void closeClientSocket(Socket socket, context) 
   {
@@ -244,8 +242,7 @@ class SocketController
     playerStarted = true;
   }
 
-  Future<void> startRecorder() async
-  {
+  Future<void> startRecorder() async {
     _recorder.initialize();
     _recorder.start();
     recorderStarted = true;
