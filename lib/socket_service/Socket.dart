@@ -25,10 +25,13 @@ class SocketController {
 
   static FlutterSoundPlayer? _player = FlutterSoundPlayer();
   RecorderStream _recorder = RecorderStream();
+  Stream<Uint8List> stream = new Stream.empty();
+  bool streamStarted = false;
 
   static bool recorderStarted = false;
   static bool playerStarted = false;
   var receptorContext;
+
 
   void setReceptorContext(BuildContext context) {
     receptorContext = context;
@@ -101,7 +104,15 @@ class SocketController {
   }
 
   void handleConnection(Socket socket) {
-    StreamSubscription? _audioStream;
+
+    //Stream<Uint8List> stream =_recorder.audioStream.asBroadcastStream();
+    //StreamSubscription? _audioStream = _recorder.audioStream.listen();
+
+    if(!streamStarted)
+    {
+      startStream();
+    }
+
     bool socketOpen = true;
     socket.listen(
       (Uint8List data) {
@@ -119,17 +130,15 @@ class SocketController {
             socket.done;
             break;
           default:
-            _audioStream = _recorder.audioStream.listen((data) {
+            stream.listen((data) {
               if (isServerClosed) {
                 print("Server is closed!");
                 socket.write("Server is closed");
                 socket.close();
                 socket.destroy();
-                _audioStream?.cancel();
               } else if (!socketOpen) {
                 socket.close();
                 socket.destroy();
-                _audioStream?.cancel();
               } else {
                 _player?.feedFromStream(data);
                 socket.add(data);
@@ -204,6 +213,12 @@ class SocketController {
 
   //---------------------------CONTROLE DE ÁUDIO-----------------------
 
+  void startStream()
+  {
+    stream = _recorder.audioStream.asBroadcastStream();
+    streamStarted = true;
+  }
+
   Future<void> createAudioContext(bool onlyAudio) async {
     print("Inicializando áudio");
     if (!playerStarted) {
@@ -221,11 +236,18 @@ class SocketController {
     playerStarted = true;
   }
 
-  Future<void> startRecorder() async {
+  Future<void> startRecorder() async 
+  {
     print("Inicializando áudio");
     _recorder.initialize();
     _recorder.start();
     recorderStarted = true;
+  }
+  Future<void> enableRecorderStream() async
+  {
+    
+    
+
   }
 
   Future<void> stopAudioSession() async {

@@ -21,6 +21,8 @@ class SoundController
   static FlutterSoundPlayer? _player = FlutterSoundPlayer();
   static FlutterSoundRecorder? _recorder = FlutterSoundRecorder();
 
+  
+
   Future<FlutterSoundPlayer?> getSoundPlayer() async
   {
     
@@ -93,29 +95,4 @@ class SoundController
 
       await _player!.openAudioSession();
   }
-
-  static Future<Uint8List> getAudioStream() async
-  {
-     var recordingDataController = StreamController<Food>();
-     Uint8List audioData = Uint8List(0);
-      recordingDataController.stream.listen((buffer) async
-      {
-      if (buffer is FoodData)
-      {
-        audioData = buffer.data!;
-      }
-      });
-
-      await _recorder!.startRecorder(
-          toStream: recordingDataController.sink,
-          codec: Codec.pcm16,
-          numChannels: 1,
-          sampleRate: tSampleRate,
-      );
-
-      return audioData;
-
-      
-  }
-
 }
