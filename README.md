@@ -1,16 +1,8 @@
 # acessibility_project
 
-A new Flutter project.
+Este projeto foi iniciado com o intenção de criar um aplicativo que viabilize o trabalho de audio descritores em eventos no geral. 
+Através da narrativa, o evento pode proporcionar à pessoas portadoras de deficiência visual a mesma experiência de pessoas não portadoras. 
 
-## Getting Started
+Este projeto foi elaborado durante os dois últimos semestre de graduação junto ao SENAI Joinville no ano de 2021, com os estudantes Alyson Eduardo Rode e Maycon de Sousa Ghizoni. 
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Obs: Atualmente o projeto encontra-se funcional, mas com uma contidade de bugs rezoável.
