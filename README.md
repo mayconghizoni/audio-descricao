@@ -1,4 +1,4 @@
-# Audio-Descriç
+# Audio-Descrição
 
 Este projeto foi iniciado com o intenção de criar um aplicativo que viabilize o trabalho de audio descritores em eventos gerais. 
 Através da narrativa, o evento pode proporcionar à pessoas portadoras de deficiência visual a mesma experiência de pessoas não portadoras. 
